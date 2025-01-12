@@ -10,26 +10,6 @@ s.SoundId = "rbxassetid://3398620867"
 s:Play()
 s.Volume = 1
 
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-
--- Function to enable no-clip for the player's character only
-local function enableNoClip()
-    game:GetService("RunService").Stepped:Connect(function()
-        -- Ensure the character exists
-        if character then
-            for _, part in ipairs(character:GetDescendants()) do
-                if part:IsA("BasePart") and part.CanCollide then
-                    part.CanCollide = false
-                end
-            end
-        end
-    end)
-end
-
--- Call the function to enable no-clip
-enableNoClip()
-
 local ToolName = "Blow Up"
 local function Script()
 local Sound = 17356346310
