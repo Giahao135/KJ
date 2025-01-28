@@ -10,9 +10,66 @@ s.SoundId = "rbxassetid://3398620867"
 s:Play()
 s.Volume = 1
 
-local ToolName = "Blow Up"
-local function Script()
+game.StarterGui:SetCore("SendNotification", {
+Title = "TOKYO KJ";
+Text = "Usuhg is a fr cat!!??1!???";
+Duration = 5;
+Icon = "rbxassetid://0"; -- leave it like that if you don't want the icon
+})
+-- remove this script at bottom if you don't wan tsb notification sound
+s= Instance.new("Sound")
+s.SoundId = "rbxassetid://3398620867"
+s:Play()
+s.Volume = 1
+
+local char = game.Players.LocalPlayer.Character
+char.Humanoid.AnimationPlayed:Connect(function(a)
+if a.Animation.AnimationId == "rbxassetid://14516273501" then
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://102159604911972"
+local Idle = char.Humanoid:LoadAnimation(Anim)
+Idle:Play(0.3)
+Idle.Priority = Enum.AnimationPriority.Idle
+Idle:AdjustSpeed(0.1)
+a.Stopped:Wait()
+Idle:Stop(0.3) 
+end
+end)
+
+local tool = Instance.new("Tool")
+tool.Name = "Blow Up"
+tool.RequiresHandle = false
+tool.CanBeDropped = false
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local lp = game.Players.LocalPlayer
+local char = lp.Character
+local hrp = char.HumanoidRootPart
+local cdcc = lp.PlayerGui.Hotbar.Backpack.LocalScript.Cooldown
+local uis = game:GetService("UserInputService")
+
+getgenv().Cooldown5 = 10
+
+local bm = lp.PlayerGui.Hotbar.Backpack.Hotbar["5"]
+local b = bm.Base
+bm.Visible = true
+b.Reuse.Visible = false
+b.ToolName.Text = "Blow Up"
+
+local function script()
+coroutine.wrap(function()
+
 local Sound = 17356346310
+local Volume = 3
+local Speed = 1
+
+s= Instance.new("Sound", game.Players.LocalPlayer.Character.HumanoidRootPart)
+s.SoundId = "rbxassetid://" .. Sound
+s:Play()
+s.Volume = Volume
+s.PlaybackSpeed = Speed
+
+local Sound = 17429233290
 local Volume = 4
 local Speed = 1
 
@@ -23,8 +80,8 @@ s.Volume = Volume
 s.PlaybackSpeed = Speed
 
 local Animation = 93546004428904
-local StartTime = 5.6 -- what duration it starts like video
-local Speed = 0.8 -- animation speed
+local StartTime = 5.8 -- what duration it starts like video
+local Speed = 0.5 -- animation speed
 local Duration= 1.8 -- how much till the animation stops
 
 local a = Instance.new("Animation")
@@ -37,12 +94,159 @@ delay(Duration, function() -- delete these 3 lines if you don't want to stop it 
 p:Stop()
 end)
 
-wait(1.8)
+Wait(1.8)
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+
+-- Wait for the player to load
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Find the "HumanoidRootPart" inside the player's character
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+if not humanoidRootPart then
+    error("HumanoidRootPart not found in player character")
+end
+
+-- Access effects from ReplicatedStorage
+local resourcesFolder = ReplicatedStorage:WaitForChild("Resources")
+local kjEffectsFolder = resourcesFolder:WaitForChild("KJEffects")
+local speedlinesFolder = kjEffectsFolder:WaitForChild("speedlinesandstuff")
+local speedEffect = speedlinesFolder:WaitForChild("thespeedthingunderultik")
+local speedlinesEffect = speedlinesFolder -- The "speedlinesandstuff" folder itself
+
+-- Clone both effects and move them to Workspace
+local speedEffectClone = speedEffect:Clone()
+speedEffectClone.Parent = Workspace
+
+local speedlinesClone = speedlinesEffect:Clone()
+speedlinesClone.Parent = Workspace
+
+-- Function to update positions of both effects
+local function updatePositions()
+    local playerPos = humanoidRootPart.Position
+
+    -- Update position of "thespeedthingunderultik"
+    local offset1 = humanoidRootPart.CFrame.LookVector * 4 -- Adjust the distance in front
+    local heightOffset1 = Vector3.new(0, 0, 0) -- Adjust the height if needed
+    speedEffectClone.CFrame = CFrame.new(playerPos + offset1 + heightOffset1, playerPos)
+
+    -- Update position of "speedlinesandstuff"
+    local offset2 = humanoidRootPart.CFrame.LookVector * 1 -- Adjust the distance in front
+    local heightOffset2 = Vector3.new(0, 7, 0) -- Adjust the height if needed
+    local rotation = CFrame.Angles(0, math.rad(humanoidRootPart.Orientation.Y), 0) -- Rotate based on player's Y orientation
+    speedlinesClone.CFrame = CFrame.new(playerPos + offset2 + heightOffset2) * rotation
+end
+
+-- Function to enable all ParticleEmitters in a given effect
+local function enableParticleEmitters(effect)
+    for _, descendant in ipairs(effect:GetDescendants()) do
+        if descendant:IsA("ParticleEmitter") then
+            descendant.Enabled = true
+        end
+    end
+end
+
+-- Enable all particle emitters for both effects
+enableParticleEmitters(speedEffectClone)
+enableParticleEmitters(speedlinesClone)
+
+-- Keep updating positions every frame
+RunService.RenderStepped:Connect(function()
+    if character and humanoidRootPart then
+        updatePositions()
+    end
+end)
+
+-- Cleanup function to destroy both effects after a set duration
+spawn(function()
+    -- Wait for the duration of the effects
+    wait(3) -- Adjust the time as needed
+
+    -- Destroy both effects
+    speedEffectClone:Destroy()
+    speedlinesClone:Destroy()
+end)
+
+local Animation = 132259592388175
+local StartTime = 0 -- what duration it starts like video
+local Speed = 0.5 -- animation speed
+local Duration= 1.8 -- how much till the animation stops
+
+local a = Instance.new("Animation")
+a.AnimationId = "rbxassetid://" .. Animation
+local p = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a)
+p:Play()
+p.TimePosition = StartTime -- what duration it starts like video
+p:AdjustSpeed(0.8)
+delay(Duration, function() -- delete these 3 lines if you don't want to stop it or you can adjust 7 to less or longer to stop animation 
+p:Stop()
+end)
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local camera = workspace.CurrentCamera  -- Reference to the camera
+
+-- Variables for the dash (or forward movement)
+local dashSpeed = 180 -- Change to how fast you want the dash
+local dashDuration = 0.8 -- Duration of the dash in seconds
+local isDashing = false
+
+-- Animation Setup
+local dashAnim = Instance.new("Animation")
+dashAnim.AnimationId = "rbxassetid://0"  -- Replace with your animation ID
+local animTrack = humanoid:LoadAnimation(dashAnim)
+
+-- Function to make the player move forward
+local function moveForward()
+    if isDashing then return end
+    isDashing = true
+
+    -- Play the dash animation immediately
+    animTrack:Play()
+
+    wait(0.1)
+
+    -- Create a BodyVelocity to move the player forward
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)  -- Max force to apply the movement
+    bodyVelocity.Parent = humanoidRootPart
+
+    local dashEndTime = tick() + dashDuration  -- Time when dash should end
+
+    -- Continuously update the direction the player is moving based on camera orientation
+    while tick() < dashEndTime do
+        -- Update direction: we use the camera's current direction
+        local cameraDirection = camera.CFrame.LookVector
+        local dashDirection = Vector3.new(cameraDirection.X, 0, cameraDirection.Z).unit
+
+        -- Apply the new velocity for the dash direction
+        bodyVelocity.Velocity = dashDirection * dashSpeed
+
+        wait(0.05)  -- Small delay to avoid overloading the server
+    end
+
+    -- Stop the dash animation
+    animTrack:Stop()
+
+    -- Remove the BodyVelocity after the dash is complete
+    bodyVelocity:Destroy()
+    isDashing = false
+end
+
+-- The `moveForward` function can now be called manually from elsewhere in the script.
+
+moveForward()  -- Call this function when you want the dash to occur
 
 local Animation = 95575238948327
 local StartTime = 0 -- what duration it starts like video
 local Speed = 1 -- animation speed
-local Duration= 3.9 -- how much till the animation stops
+local Duration= 2.2 -- how much till the animation stops
 
 local a = Instance.new("Animation")
 a.AnimationId = "rbxassetid://" .. Animation
@@ -61,8 +265,8 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local camera = workspace.CurrentCamera  -- Reference to the camera
 
 -- Variables for the dash (or forward movement)
-local dashSpeed = 130 -- Change to how fast you want the dash
-local dashDuration = 3.7 -- Duration of the dash in seconds
+local dashSpeed = 180 -- Change to how fast you want the dash
+local dashDuration = 2 -- Duration of the dash in seconds
 local isDashing = false
 
 -- Animation Setup
@@ -113,17 +317,17 @@ moveForward()  -- Call this function when you want the dash to occur.
 
 wait(0)
 
-local Animation = 102814369422840
+local Animation = 132259592388175
 local StartTime = 0 -- what duration it starts like video
-local Speed = 1 -- animation speed
-local Duration= 8 -- how much till the animation stops
+local Speed = 0.5 -- animation speed
+local Duration= 1 -- how much till the animation stops
 
 local a = Instance.new("Animation")
 a.AnimationId = "rbxassetid://" .. Animation
 local p = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a)
 p:Play()
 p.TimePosition = StartTime -- what duration it starts like video
-p:AdjustSpeed(0.5)
+p:AdjustSpeed(0.4)
 delay(Duration, function() -- delete these 3 lines if you don't want to stop it or you can adjust 7 to less or longer to stop animation 
 p:Stop()
 end)
@@ -135,9 +339,81 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local camera = workspace.CurrentCamera  -- Reference to the camera
 
 -- Variables for the dash (or forward movement)
-local initialDashSpeed = 70 -- Starting speed of the dash
+local dashSpeed = 180 -- Change to how fast you want the dash
+local dashDuration = 0.8 -- Duration of the dash in seconds
+local isDashing = false
+
+-- Animation Setup
+local dashAnim = Instance.new("Animation")
+dashAnim.AnimationId = "rbxassetid://0"  -- Replace with your animation ID
+local animTrack = humanoid:LoadAnimation(dashAnim)
+
+-- Function to make the player move forward
+local function moveForward()
+    if isDashing then return end
+    isDashing = true
+
+    -- Play the dash animation immediately
+    animTrack:Play()
+
+    wait(0.1)
+
+    -- Create a BodyVelocity to move the player forward
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)  -- Max force to apply the movement
+    bodyVelocity.Parent = humanoidRootPart
+
+    local dashEndTime = tick() + dashDuration  -- Time when dash should end
+
+    -- Continuously update the direction the player is moving based on camera orientation
+    while tick() < dashEndTime do
+        -- Update direction: we use the camera's current direction
+        local cameraDirection = camera.CFrame.LookVector
+        local dashDirection = Vector3.new(cameraDirection.X, 0, cameraDirection.Z).unit
+
+        -- Apply the new velocity for the dash direction
+        bodyVelocity.Velocity = dashDirection * dashSpeed
+
+        wait(0.05)  -- Small delay to avoid overloading the server
+    end
+
+    -- Stop the dash animation
+    animTrack:Stop()
+
+    -- Remove the BodyVelocity after the dash is complete
+    bodyVelocity:Destroy()
+    isDashing = false
+end
+
+-- The `moveForward` function can now be called manually from elsewhere in the script.
+
+moveForward()  -- Call this function when you want the dash to occur
+
+local Animation = 102814369422840
+local StartTime = 0 -- what duration it starts like video
+local Speed = 1 -- animation speed
+local Duration= 8 -- how much till the animation stops
+
+local a = Instance.new("Animation")
+a.AnimationId = "rbxassetid://" .. Animation
+local p = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a)
+p:Play()
+p.TimePosition = StartTime -- what duration it starts like video
+p:AdjustSpeed(0.4)
+delay(Duration, function() -- delete these 3 lines if you don't want to stop it or you can adjust 7 to less or longer to stop animation 
+p:Stop()
+end)
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local camera = workspace.CurrentCamera  -- Reference to the camera
+
+-- Variables for the dash (or forward movement)
+local initialDashSpeed = 120 -- Starting speed of the dash
 local dashDuration = 0.4 -- Duration of the constant dash in seconds
-local decelerationTime = 0.7 -- Time to decelerate from initialDashSpeed to 0
+local decelerationTime = 1.5 -- Time to decelerate from initialDashSpeed to 0
 local isDashing = false
 
 -- Animation Setup
@@ -196,22 +472,24 @@ end
 -- The `moveForward` function can now be called manually from elsewhere in the script.
 
 moveForward()  -- Call this function when you want the dash to occur.
+
+end)()
 end
 
--- don't change anything here unless you know
-local fg = false
-local t = Instance.new("Tool")
-t.Name = ToolName
-t.RequiresHandle = false -- like holding an object only if you put a part named "Handle" but it's going to be client
-t.CanBeDropped = false
-t.Parent = game.Players.LocalPlayer.Backpack
-t.Activated:Connect(function() -- instead of Activated you can do Equipped or Unequipped
-if not fg then
-fg = true
-Script()
-fg = false
+local function onActivated()
+    if not b:FindFirstChild("Cooldown") then
+        script()
+        local deez = cdcc:Clone()
+        deez.Parent = b
+        game:GetService("TweenService"):Create(deez, TweenInfo.new(getgenv().Cooldown5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
+            Size = UDim2.new(1, 0, 0, 0)
+        }):Play()
+        wait(getgenv().Cooldown5)
+        deez:Destroy()
+    end
 end
-end)
+
+tool.Activated:Connect(onActivated)
 
 --[[BLOCKED SOUND]]
 
@@ -309,8 +587,8 @@ local function resetHotbarText()
         local hotbar = LocalPlayer.PlayerGui.Hotbar.Backpack.Hotbar
 
         -- Image for the ult Bar
-        healthBar.Image = "rbxassetid://15118064226"
-        healthGlow.Image = "rbxassetid://15118058115"
+        healthBar.Image = "rbxassetid://15248647876"
+        healthGlow.Image = "rbxassetid://15248647876"
 
         healthBar.ImageColor3 = Color3.fromRGB(255, 0, 0)
         game:GetService("TweenService"):Create(healthBar, TweenInfo.new(1.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {ImageColor3 = Color3.fromRGB(139,0,0)}):Play()
@@ -333,65 +611,6 @@ local function resetHotbarText()
 end
 
 resetHotbarText()
-
-local url = "https://raw.githubusercontent.com/Giahao135/Image/refs/heads/main/KJIcon.png"
-local fileName = "kj-icon.png"
-
-if not isfile(fileName) then
-    writefile(fileName, game:HttpGet(url))
-end
-
-local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-local imageLabel = Instance.new("ImageLabel")
-imageLabel.Size = UDim2.new(0.10, 0, 0.20, 0)
-imageLabel.Position = UDim2.new(0.45, 0, -0.20, 0) -- Start off-screen (top)
-imageLabel.Image = getcustomasset(fileName)
-imageLabel.BackgroundTransparency = 1
-imageLabel.ImageTransparency = 1 -- Start fully transparent
-imageLabel.Parent = screenGui
-
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-
--- Easing function (ease-out cubic)
-local function easeOutCubic(t)
-    return 1 - math.pow(1 - t, 3)
-end
-
--- Fade-in and move effect
-local duration = 2 -- Duration of the animation in seconds
-local startTime = tick()
-local startY = -0.10
-local endY = 0.50
-
-while tick() - startTime < duration do
-    local elapsed = tick() - startTime
-    local alpha = elapsed / duration
-    local easedAlpha = easeOutCubic(alpha) -- Apply easing for movement
-
-    -- Update position
-    local newY = startY + (endY - startY) * easedAlpha
-    imageLabel.Position = UDim2.new(0.45, 0, newY, 0)
-
-    -- Update transparency (fade-in)
-    imageLabel.ImageTransparency = 0.5 - alpha
-
-    wait()
-end
-
--- Ensure final position and transparency are correct
-imageLabel.Position = UDim2.new(0.45, 0, 0.50, 0)
-imageLabel.ImageTransparency = 0
-
--- Handle player respawn
-local function onCharacterAdded()
-    screenGui:Destroy()
-end
-
--- Connect the respawn event
-player.CharacterAdded:Connect(onCharacterAdded)
 
 --[[Animations]]
 
@@ -442,7 +661,23 @@ Anim.TimePosition = startTime
 
 Anim:AdjustSpeed(1.8)
 
-local Test = game:GetService("ReplicatedStorage").Resources.LastBreath.UpWind.Part.Attachment
+local boom1 = game.ReplicatedStorage.Resources.KJEffects["spinnerthing"].spinningpartysmoke:Clone()
+boom1.Parent = game.Players.LocalPlayer.Character["Torso"]
+    for _, child in ipairs(boom1:GetChildren()) do
+        if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+            child:Emit(20) -- Emit 20 particles
+        end
+    end
+
+local hit1 = game.ReplicatedStorage.Resources.KJEffects["RUNAROUNDWIND"].RUNAROUNDWIND:Clone()
+    hit1.Parent = game.Players.LocalPlayer.Character["HumanoidRootPart"]
+        for _, child in ipairs(hit1:GetChildren()) do
+            if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+                child:Emit(18) -- Emit 20 particles
+            end
+        end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects.SpinningSmoke.Smoke
 local test = Test:Clone()
 test.Parent = game.Players.LocalPlayer.Character["HumanoidRootPart"]
 
@@ -450,55 +685,10 @@ test.Parent = game.Players.LocalPlayer.Character["HumanoidRootPart"]
 for _, child in ipairs(test:GetChildren()) do
     if child:IsA("ParticleEmitter") then
         
-        child.Color = ColorSequence.new(Color3.new(225,225,225))
-        child:Emit(10)
+        child:Emit(100)
         child.Enabled = false
     end
 end
-
---Destroy function
-local function destroyTest()
-    for _, child in ipairs(test:GetChildren()) do
-        if child:IsA("ParticleEmitter") then
-            child.Enabled = false -- Disable the particle emitter
-        end
-    end
-
-    task.wait(2) -- Wait a couple of seconds for particles to finish
-    test:Destroy() -- Destroy the cloned object
-end
-
--- Call the destroy function after a delay
-task.delay(0, destroyTest) -- Adjust the delay as needed
-
-local Test = game:GetService("ReplicatedStorage").Resources.IcePath.Start.extra1
-local test = Test:Clone()
-test.Parent = game.Players.LocalPlayer.Character["HumanoidRootPart"]
-
-
-for _, child in ipairs(test:GetChildren()) do
-    if child:IsA("ParticleEmitter") then
-        
-        child.Color = ColorSequence.new(Color3.new(225,225,225))
-        child:Emit(10)
-        child.Enabled = false
-    end
-end
-
---Destroy function
-local function destroyTest()
-    for _, child in ipairs(test:GetChildren()) do
-        if child:IsA("ParticleEmitter") then
-            child.Enabled = false -- Disable the particle emitter
-        end
-    end
-
-    task.wait(2) -- Wait a couple of seconds for particles to finish
-    test:Destroy() -- Destroy the cloned object
-end
-
--- Call the destroy function after a delay
-task.delay(0, destroyTest) -- Adjust the delay as needed
 
 task.spawn(function()
     local function GetGitSound(GithubSnd, SoundName)
@@ -711,14 +901,14 @@ Anim:AdjustSpeed(0.1)
 
 Anim.TimePosition = startTime
 
-Anim:AdjustSpeed(2)
+Anim:AdjustSpeed(3)
 
 local ambatukam = game.Players.LocalPlayer.Character:WaitForChild("BarrageBind")
 ambatukam:Destroy()
 
 local Sound = 16945593216
 local Volume = 1.7
-local Speed = 0.9
+local Speed = 1
 local StartTime = 1.9 -- Set the start time in seconds
 
 local s = Instance.new("Sound", game.Players.LocalPlayer.Character.HumanoidRootPart)
@@ -727,20 +917,6 @@ s.Volume = Volume
 s.PlaybackSpeed = Speed
 s.TimePosition = StartTime -- Set the starting time of the sound
 s:Play()
-
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-
--- Wait for the HumanoidRootPart to load
-local rootPart = character:WaitForChild("HumanoidRootPart")
-local humanoid = character:WaitForChild("Humanoid")
-
--- Freeze the player
-humanoid.WalkSpeed = 0
-humanoid.JumpPower = 0
-
--- Optional: Anchor the character's position
-rootPart.Anchored = true
 
 --[VFX ADD]
 
@@ -806,22 +982,37 @@ spawn(function()
     enableParticleEmitters(speedlinesandstuffClone)
 end)
 
-wait(1.6)
+wait(1.3)
 workspace.barrage:Destroy()
 
 --[END VFX]
 
--- Wait for 2 seconds
-wait(0)
-
--- Unfreeze the player
-humanoid.WalkSpeed = 16 -- Default WalkSpeed
-humanoid.JumpPower = 50 -- Default JumpPower
-rootPart.Anchored = false
 
 delay(0, function()
 
     Anim:Stop()
+
+task.wait(0)
+
+local AnimAnim2 = Instance.new("Animation")
+
+AnimAnim2.AnimationId = "rbxassetid://14900168720"
+
+local Anim2 = Humanoid:LoadAnimation(AnimAnim2)
+
+
+local startTime = 1.7
+
+
+Anim:Stop()
+
+Anim2:Play()
+
+Anim2:AdjustSpeed(0)
+
+Anim2.TimePosition = startTime
+
+Anim2:AdjustSpeed(1.4)
 
 end)
 
@@ -863,6 +1054,31 @@ for _, animTrack in pairs(Humanoid:GetPlayingAnimationTracks()) do
     animTrack:Stop()
 
 end
+
+local Text = "How about this!"
+
+-- don't change anything here unless you know
+local v22808 = require(game.ReplicatedStorage.Resources.UFW.TekrinnDialogue)
+local v22811 = {
+    {
+        Text = Text,
+        Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+                ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 17, 17)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+            }),
+        TextStrokeColor = Color3.new(0, 0, 0),
+        Bold = false,
+        Italic = false,
+        Shake = {
+            Enabled = false,
+            Intensity = 5,
+            Lifetime = 1
+        },
+        TypeSpeed = 0.03
+    }
+}
+v22808.Speak(game.Players.LocalPlayer.Character, v22811)
 
 
 local AnimAnim = Instance.new("Animation")
@@ -1065,6 +1281,27 @@ Spin:Remove()
 WindUp1:Remove()
 Glow:Remove()
 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+wait(0)
+local function impactframe()
+    local light = Instance.new("Highlight", character)
+    local cc = Instance.new("ColorCorrectionEffect", game.Lighting)
+    light.OutlineTransparency = 1
+    light.FillTransparency = 0
+    light.FillColor = Color3.new(0, 0, 0)
+    cc.Brightness = 1
+    wait(0.01)
+    light.FillColor = Color3.new(1, 1, 1)
+    cc.Brightness = -1
+    wait(0.01)
+    cc:Destroy()
+    light:Destroy()
+end
+
+impactframe()
+
 local Lightning = Instance.new("Sound")
 Lightning.SoundId = "rbxassetid://17173355584"
 Lightning.Volume = 0
@@ -1245,8 +1482,48 @@ Anim.TimePosition = startTime
 
 Anim:AdjustSpeed(0.6)
 
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local head = character:WaitForChild("Head")
 
-delay(1, function()
+-- Save the current camera type and subject
+local originalCameraType = camera.CameraType
+local originalCameraSubject = camera.CameraSubject
+
+-- Set the camera to Scriptable mode (cutscene mode)
+camera.CameraType = Enum.CameraType.Scriptable
+
+-- Calculate the camera's cutscene position
+local radius = 5 -- Distance from the character to the camera
+local angle = math.rad(-160) -- 60 degrees forward
+local offset = humanoidRootPart.CFrame:VectorToWorldSpace(Vector3.new(-radius * math.cos(angle), -1.5, -radius * math.sin(angle)))
+local cutsceneCFrame = CFrame.new(head.Position + offset, head.Position)
+
+-- Use TweenService for smooth transition
+local TweenService = game:GetService("TweenService")
+local tweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out) -- 1.5 seconds smooth transition
+
+-- Create tween for the camera movement
+local tween = TweenService:Create(camera, tweenInfo, {CFrame = cutsceneCFrame})
+tween:Play()
+
+-- Wait for the tween to finish
+tween.Completed:Wait()
+
+-- Pause at the cutscene position
+wait(1)
+
+--Instantly return the camera to the player's position
+camera.CFrame = humanoidRootPart.CFrame
+
+-- Restore the camera type and subject to the player's default view
+camera.CameraType = originalCameraType
+camera.CameraSubject = originalCameraSubject
+
+
+delay(0, function()
 
     Anim:Stop()
 
@@ -1259,7 +1536,7 @@ AnimAnim2.AnimationId = "rbxassetid://140164642047188"
 local Anim2 = Humanoid:LoadAnimation(AnimAnim2)
 
 
-local startTime = 5.5
+local startTime = 6
 
 
 Anim:Stop()
@@ -1270,9 +1547,178 @@ Anim2:AdjustSpeed(0)
 
 Anim2.TimePosition = startTime
 
-Anim2:AdjustSpeed(1.3)
+Anim2:AdjustSpeed(1.8)
 
 end)
+
+local player = game:GetService("Players").LocalPlayer
+local camera = game:GetService("Workspace").CurrentCamera
+local players = game:GetService("Players")
+local npcName = "Weakest Dummy"  -- Name of the NPC to look for
+local RunService = game:GetService("RunService")
+
+local followConnection -- Variable to hold the connection for camera following
+
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
+
+    for _, otherPlayer in pairs(players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("Head") then
+            local distance = (player.Character.HumanoidRootPart.Position - otherPlayer.Character.Head.Position).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = otherPlayer
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+local function findWeakestDummy()
+    local weakestDummy = game.Workspace.Live:FindFirstChild(npcName)
+
+    -- If the NPC exists and has a head
+    if weakestDummy and weakestDummy:FindFirstChild("Head") then
+        return weakestDummy
+    end
+    return nil
+end
+
+local function updateCameraFollow(target)
+    if target then
+
+        followConnection = RunService.RenderStepped:Connect(function()
+            if target and target:FindFirstChild("Head") then
+                local headPosition = target.Head.Position
+
+                local cameraPosition = headPosition
+                local l = target.Head.CFrame.LookVector
+
+                -- Set the camera's CFrame to be at the center of the head, facing the direction the head is facing
+                camera.CameraType = Enum.CameraType.Scriptable -- Switch to scriptable camera mode
+                camera.CFrame = CFrame.new(cameraPosition, cameraPosition + l)
+
+                camera.FieldOfView = 80
+            end
+        end)
+    end
+end
+
+local function resetCamera()
+    if followConnection then
+        followConnection:Disconnect()
+    end
+    camera.CameraType = Enum.CameraType.Custom
+    camera.FieldOfView = 70
+end
+
+local function switchCamera()
+    local weakestDummy = findWeakestDummy()
+    local nearestPlayer = findNearestPlayer()
+
+    if weakestDummy then
+        updateCameraFollow(weakestDummy)
+    elseif nearestPlayer then
+        updateCameraFollow(nearestPlayer.Character)
+    else
+        updateCameraFollow(player.Character)
+    end
+end
+coroutine.wrap(function()
+switchCamera()
+
+wait(1)
+resetCamera()
+end)()
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local workspace = game:GetService("Workspace")
+
+local npcName = "Weakest Dummy" -- Name of the NPC
+
+-- Function to find the nearest player
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
+
+    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (player.Character.HumanoidRootPart.Position - otherPlayer.Character.HumanoidRootPart.Position).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = otherPlayer
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+-- Function to remove the fake head from a player temporarily
+local function removePlayerFakeHeadTemporarily(target)
+    if not target then return end
+
+    local targetCharacter = target.Character
+    if targetCharacter and targetCharacter:FindFirstChild("Head") then
+        local head = targetCharacter.Head
+        local fakeHead = head:FindFirstChild("FakeHead") -- Look for the fake head by name or adjust this to match its exact name.
+
+        if fakeHead then
+            local parent = fakeHead.Parent
+            fakeHead.Parent = nil -- Temporarily remove the fake head
+
+            -- Restore the fake head after 1 second
+            task.delay(1, function()
+                if parent then
+                    fakeHead.Parent = parent
+                end
+            end)
+        else
+            warn("No FakeHead found on the player's Head!")
+        end
+    end
+end
+
+-- Function to remove the dummy's hair temporarily
+local function removeDummyHairTemporarily()
+    local npc = workspace.Live:FindFirstChild(npcName)
+    if npc and npc:FindFirstChild("Hair") then
+        local hair = npc.Hair
+        local parent = hair.Parent
+        hair.Parent = nil -- Temporarily remove the hair
+
+        -- Restore the hair after 1 second
+        task.delay(1, function()
+            if parent then
+                hair.Parent = parent
+            end
+        end)
+    else
+        warn("NPC or Hair not found!")
+    end
+end
+
+-- Main function to handle both dummy and player
+local function handleTarget()
+    local nearestPlayer = findNearestPlayer()
+    local npc = workspace.Live:FindFirstChild(npcName)
+
+    if nearestPlayer then
+        -- Remove fake head from the nearest player
+        removePlayerFakeHeadTemporarily(nearestPlayer)
+    elseif npc then
+        -- Remove hair from the dummy
+        removeDummyHairTemporarily()
+    else
+        warn("No valid target found!")
+    end
+end
+
+-- Call the function
+handleTarget()
 
 
     end
@@ -1311,10 +1757,35 @@ for _, animTrack in pairs(Humanoid:GetPlayingAnimationTracks()) do
 
 end
 
+local Text = "THIS IS THE LAST TIME!"
+
+-- don't change anything here unless you know
+local v22808 = require(game.ReplicatedStorage.Resources.UFW.TekrinnDialogue)
+local v22811 = {
+    {
+        Text = Text,
+        Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+                ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 17, 17)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 17, 17))
+            }),
+        TextStrokeColor = Color3.new(0, 0, 0),
+        Bold = true,
+        Italic = true,
+        Shake = {
+            Enabled = true,
+            Intensity = 5,
+            Lifetime = 1
+        },
+        TypeSpeed = 0.05
+    }
+}
+v22808.Speak(game.Players.LocalPlayer.Character, v22811)
+
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://15503060232 "
+AnimAnim.AnimationId = "rbxassetid://17464644182 "
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -1328,12 +1799,12 @@ Anim:AdjustSpeed(0)
 
 Anim.TimePosition = startTime
 
-Anim:AdjustSpeed(0.3)
+Anim:AdjustSpeed(0.56)
 
-local Sound = 17325174223
-local Volume = 4
+local Sound = 17150550302
+local Volume = 4.5
 local Speed = 1
-local StartTime = 4 -- Set the start time in seconds
+local StartTime = 7.3 -- Set the start time in seconds
 
 local s = Instance.new("Sound", game.Players.LocalPlayer.Character.HumanoidRootPart)
 s.SoundId = "rbxassetid://" .. Sound
@@ -1342,90 +1813,212 @@ s.PlaybackSpeed = Speed
 s.TimePosition = StartTime -- Set the starting time
 s:Play()
 
-local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-local s = Instance.new("ScreenGui")
-s.Parent = playerGui
-
-local textLabel = Instance.new("TextLabel")
-textLabel.Parent = s
-textLabel.Position = UDim2.new(0.5, -200, 0.8, -50)
-textLabel.Size = UDim2.new(0, 400, 0, 50)
-textLabel.TextSize = 27
-textLabel.TextColor3 = Color3.fromRGB(0, 0, 0) --text color
-textLabel.Font = Enum.Font.Antique -- font here
-textLabel.BackgroundTransparency = 1
-textLabel.Text = "" -- dont change
-textLabel.TextStrokeTransparency = 0
-textLabel.TextStrokeColor3 = Color3.fromRGB(255, 0, 0) --stroke color here
-
-local function type(text)
-    local index = 1
-    while index <= #text do
-        textLabel.Text = string.sub(text, 1, index)
-        index = index + 1
-        wait(0.02)
-    end
-end
-
-local function f()
-    for i = 1, 20 do
-        textLabel.TextTransparency = i / 20
-        wait(0.01)
-    end
-end
-local function fs()
-coroutine.wrap(function()
-textLabel.TextStrokeTransparency = 0.1
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.2
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.3
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.4
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.5
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.6
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.7
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.8
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 0.9
-task.wait(0.1)
-textLabel.TextStrokeTransparency = 1
-end)()
-end
-coroutine.wrap(function()
-    local m = "It isn't even worth it anymore.." -- text here
-    type(m)
-    wait(1.1)
-    fs() -- this for stroke lmao
-    f()
-end)()
-
 
 --end time anim here
-Wait(1.3)
-
---end time anim here
+Wait(0.78)
 
 Anim:Stop() -- Stops the first animation
 
 task.wait(0)
 
 local AnimAnim2 = Instance.new("Animation")
-AnimAnim2.AnimationId = "rbxassetid://16592787958"
+AnimAnim2.AnimationId = "rbxassetid://17464644182"
 
 local Anim2 = Humanoid:LoadAnimation(AnimAnim2)
 
-local startTime = 2
+local startTime = 0.48
+
+Anim:Stop()
 
 Anim2:Play()
 Anim2:AdjustSpeed(0)
 Anim2.TimePosition = startTime
-Anim2:AdjustSpeed(0.6)
+Anim2:AdjustSpeed(0) -- Play animation at normal speed
+
+-- Add delay and then stop the animation
+local delayTime = 1 -- Change this to the number of seconds to delay
+
+task.delay(delayTime, function()
+    Anim2:Stop()
+end)
+
+task.spawn(function()
+    local function GetGitSound(GithubSnd, SoundName)
+        local url = GithubSnd
+        if not isfile(SoundName .. ".mp3") then
+            writefile(SoundName .. ".mp3", game:HttpGet(url))
+        end
+        local sound = Instance.new("Sound")
+        sound.SoundId = (getcustomasset or getsynasset)(SoundName .. ".mp3")
+        return sound
+    end
+
+    local Clock = GetGitSound("https://github.com/Giahao135/Audio/blob/main/DIVE!!%20SPEECH%20REMAKE.mp3?raw=true", "ULTAH2")
+
+    Clock.Parent = workspace
+    Clock.Volume = 20
+    Clock.TimePosition = 1
+    Clock:Play()
+
+    -- Fade-out logic
+    local fadeOutDuration = 2.5 -- duration in seconds for the fade-out
+    local fadeOutStep = 0.1 -- time in seconds between each volume decrease
+    task.wait(2.5) -- Wait before starting the fade-out (optional)
+
+    for i = 1, fadeOutDuration / fadeOutStep do
+        Clock.Volume = Clock.Volume - (20 / (fadeOutDuration / fadeOutStep)) -- Gradually reduce volume
+        task.wait(fadeOutStep)
+    end
+
+    Clock:Stop()
+    Clock:Destroy()
+end)
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...Emit"].EmitBatch2
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(1)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...1"].EnableBatch2
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(10)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...1OG"].EnableBatch2
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(3)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...Emit"].EmitBatch1
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(15.8)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...Emit"].EmitBatch3
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(0.5)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...Emit2"].EmitBatch1
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(12)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...Emit"].EmitBatch1
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(3)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...Emit2OG"].EmitBatch1
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(10)
+        child.Enabled = false
+    end
+end
+
+local Test = game:GetService("ReplicatedStorage").Resources.KJEffects["fine...Emit2OG"].EmitBatch2
+local test = Test:Clone()
+test.Parent = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+for _, child in ipairs(test:GetChildren()) do
+    if child:IsA("ParticleEmitter") then
+        child:Emit(5)
+        child.Enabled = false
+    end
+end
+
+Wait(0.8)
+
+local LocalPlayer = game.Players.LocalPlayer
+
+local function typewriterEffect(label, text, delayTime)
+    label.Text = ""
+    for i = 1, #text do
+        label.Text = label.Text .. text:sub(i, i)
+        wait(delayTime)
+    end
+end
+
+local function resetHotbarText()
+    coroutine.wrap(function()
+        local magicHealth = LocalPlayer.PlayerGui.ScreenGui:WaitForChild("MagicHealth")
+        local healthBar = magicHealth:WaitForChild("Health"):WaitForChild("Bar"):WaitForChild("Bar")
+        local healthGlow = magicHealth.Health.Glow
+        local hotbar = LocalPlayer.PlayerGui.Hotbar.Backpack.Hotbar
+
+        -- Image for the ult Bar
+        healthBar.Image = "rbxassetid://15248647876"
+        healthGlow.Image = "rbxassetid://15248647876"
+
+       healthBar.ImageColor3 = Color3.fromRGB(255, 0, 0)
+        game:GetService("TweenService"):Create(healthBar, TweenInfo.new(1.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {ImageColor3 = Color3.fromRGB(139, 0, 0)}):Play()
+
+       
+        magicHealth.TextLabel.Text = "idk"
+
+        typewriterEffect(hotbar["1"].Base.ToolName, "?", 0.03)
+        typewriterEffect(hotbar["2"].Base.ToolName, "Stoic Bomb", 0.03)
+        typewriterEffect(hotbar["3"].Base.ToolName, "?", 0.03)
+        typewriterEffect(hotbar["4"].Base.ToolName, "?", 0.03)
+
+        -- Set font for tool names
+        for i = 1, 5 do
+            local toolNameLabel = hotbar[tostring(i)].Base.ToolName
+            toolNameLabel.Font = Enum.Font.SourceSans -- Set your desired font here
+        end
+
+       
+        typewriterEffect(magicHealth.TextLabel, "THIS IS THE LAST TIME!", 0.05)
+    end)()
+end
+
+resetHotbarText()
 
     end
 
@@ -1531,7 +2124,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://13491635433 "
+AnimAnim.AnimationId = "rbxassetid://123005629431309 "
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -1596,7 +2189,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://10469639222 "
+AnimAnim.AnimationId = "rbxassetid://100059874351664 "
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -1692,6 +2285,120 @@ s.PlaybackSpeed = Speed
 end
 
 --[[M1 X4]]
+
+--[[TABLE FLIP]]
+
+humanoid.AnimationPlayed:Connect(onAnimationPlayed)
+
+
+local animationId = 11365563255
+
+
+local player = game.Players.LocalPlayer
+
+local character = player.Character or player.CharacterAdded:Wait()
+
+local humanoid = character:WaitForChild("Humanoid")
+
+
+local function onAnimationPlayed(animationTrack)
+
+    if animationTrack.Animation.AnimationId == "rbxassetid://" .. animationId then
+
+local p = game.Players.LocalPlayer
+
+local Humanoid = p.Character:WaitForChild("Humanoid")
+
+
+for _, animTrack in pairs(Humanoid:GetPlayingAnimationTracks()) do
+
+    animTrack:Stop()
+
+end
+
+--SERVER SIDED ANIM
+
+local AnimationId = "11365563255" -- Replace with your animation ID
+local StartTime = 0 -- The time at which the animation starts
+local Speed = 1 -- The speed of the animation
+local Duration = 8 -- How long the animation plays
+
+-- Function to play the animation
+local function playServerAnimation(character, playerName)
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        local animation = Instance.new("Animation")
+        animation.AnimationId = "rbxassetid://" .. AnimationId
+        local animationTrack = humanoid:LoadAnimation(animation)
+
+        animationTrack.TimePosition = StartTime
+        animationTrack:Play()
+        animationTrack:AdjustSpeed(Speed)
+        print(playerName .. "'s animation started on server.") -- Debug print
+
+        -- Check if it is replicating to other players
+        game.Players.PlayerAdded:Connect(function(otherPlayer)
+            if otherPlayer.Name ~= playerName then
+                print("Checking if " .. playerName .. "'s animation is visible to " .. otherPlayer.Name)
+                task.wait(1) -- Wait a bit to ensure animation should have replicated
+                if animationTrack.IsPlaying then
+                    print("Animation is visible to " .. otherPlayer.Name .. "'s POV.")
+                else
+                    print("Animation is NOT visible to " .. otherPlayer.Name .. "'s POV.")
+                end
+            end
+        end)
+
+        -- Optionally stop the animation after a set duration
+        task.delay(Duration, function()
+            if animationTrack.IsPlaying then
+                animationTrack:Stop()
+                print(playerName .. "'s animation stopped.")
+            end
+        end)
+    else
+        print(playerName .. " does not have a humanoid. Animation cannot play.")
+    end
+end
+
+-- Trigger animation for a specific player’s character (server-side only)
+game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Delay ensures the character is fully loaded
+        task.wait(1)
+        playServerAnimation(character, player.Name)
+    end)
+end)
+
+--SERVER SIDED ANIM END--
+
+--CLIENT ANIM
+
+local ClientAnimation = 18897695481
+local StartTime = 0 -- which time it starts like video
+local Speed = 1 -- animation speed
+local Duration = 8 -- when the animation stops
+
+local p = game.Players.LocalPlayer
+local Humanoid = p.Character:WaitForChild("Humanoid")
+local AnimAnim = Instance.new("Animation")
+AnimAnim.AnimationId = "rbxassetid://" .. ClientAnimation
+local Anim = Humanoid:LoadAnimation(AnimAnim)
+AnimAnim.AnimationId = "rbxassetid://0"
+Anim:Play()
+Anim.TimePosition = StartTime
+Anim:AdjustSpeed(Speed)
+delay(Duration, function() 
+Anim:Stop()
+end)
+
+--CLIENT--
+
+    end
+
+end
+
+--[[TABLE FLIP END]]
 
 --[[Dash]]
 
